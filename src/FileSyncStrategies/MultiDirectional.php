@@ -5,6 +5,7 @@ namespace DivineOmega\FileSync;
 use DivineOmega\FileSync\FileListing\FileListing;
 use DivineOmega\FileSync\FileListing\FileListingFactory;
 use DivineOmega\FileSync\FileListing\TransferAction;
+use DivineOmega\FileSync\FileListing\TransferActionFactory;
 use DivineOmega\FileSync\Interfaces\FileSyncStrategyInterface;
 use League\Flysystem\Filesystem;
 
@@ -40,14 +41,13 @@ class MultiDirectional implements FileSyncStrategyInterface
 
                 $files = $fileListing->getFilesToTransferTo($otherFileListing);
 
-                foreach ($files as $file) {
+                $newTransferActions = TransferActionFactory::createFromFiles(
+                    $files,
+                    $fileListing->filesystem,
+                    $otherFileListing->filesystem
+                );
 
-                    $transferActions[] = new TransferAction(
-                        $file->path,
-                        $fileListing->filesystem,
-                        $otherFileListing->filesystem
-                    );
-                }
+                $transferActions = array_merge($transferActions, $newTransferActions);
 
             }
         }
