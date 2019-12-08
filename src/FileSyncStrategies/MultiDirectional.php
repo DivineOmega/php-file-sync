@@ -2,6 +2,7 @@
 
 namespace DivineOmega\FileSync\FileSyncStrategies;
 
+use DivineOmega\CliProgressBar\ProgressBar;
 use DivineOmega\FileSync\FileListing\FileListing;
 use DivineOmega\FileSync\FileListing\FileListingFactory;
 use DivineOmega\FileSync\FileListing\TransferAction;
@@ -28,9 +29,25 @@ class MultiDirectional implements FileSyncStrategyInterface
 
     public function begin(): void
     {
-        $transferActions = [];
+        if ($this->showProgressBar) {
+            $maxProgress = 1;
+            $progressBar = new ProgressBar();
+            $progressBar->setMaxProgress(1);
+            $progressBar->setMessage('Getting file listings...');
+            $progressBar->display();
+        }
 
         $fileListings = FileListingFactory::createFromFilesystems($this->filesystems);
+
+        if ($this->showProgressBar) {
+            $progressBar->advance();
+            $maxProgress += count($fileListings);
+            $progressBar->setMaxProgress($maxProgress);
+            $progressBar->setMessage('Determining differences...');
+            $progressBar->display();
+        }
+
+        $transferActions = [];
 
         foreach($fileListings as $key => $fileListing) {
 
@@ -50,10 +67,31 @@ class MultiDirectional implements FileSyncStrategyInterface
                 $transferActions = array_merge($transferActions, $newTransferActions);
 
             }
+
+            if ($this->showProgressBar) {
+                $progressBar->advance();
+                $progressBar->display();
+            }
+        }
+
+        if ($this->showProgressBar) {
+            $maxProgress += count($transferActions);
+            $progressBar->setMaxProgress($maxProgress);
+            $progressBar->setMessage('Transferring files...');
+            $progressBar->display();
         }
 
         foreach($transferActions as $transferAction) {
             $transferAction->transfer();
+
+            if ($this->showProgressBar) {
+                $progressBar->advance();
+                $progressBar->display();
+            }
+        }
+
+        if ($this->showProgressBar) {
+            $progressBar->complete();
         }
     }
 }

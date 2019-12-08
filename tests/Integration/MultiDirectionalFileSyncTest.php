@@ -50,7 +50,6 @@ final class MultiDirectionalFileSyncTest extends TestCase
             ->with($directoryA)
             ->with($directoryB)
             ->with($directoryC)
-            ->withProgressBar()
             ->begin();
 
         $filesA = glob(__DIR__.'/Data/a/*.txt');
