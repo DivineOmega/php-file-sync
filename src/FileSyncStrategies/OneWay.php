@@ -1,6 +1,6 @@
 <?php
 
-namespace DivineOmega\FileSync;
+namespace DivineOmega\FileSync\FileSyncStrategies;
 
 use DivineOmega\FileSync\Interfaces\FileSyncStrategyInterface;
 

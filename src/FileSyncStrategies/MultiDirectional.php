@@ -1,6 +1,6 @@
 <?php
 
-namespace DivineOmega\FileSync;
+namespace DivineOmega\FileSync\FileSyncStrategies;
 
 use DivineOmega\FileSync\FileListing\FileListing;
 use DivineOmega\FileSync\FileListing\FileListingFactory;
