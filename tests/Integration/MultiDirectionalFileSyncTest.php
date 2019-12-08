@@ -22,6 +22,19 @@ final class MultiDirectionalFileSyncTest extends TestCase
             mkdir($path, 0777, true);
         }
 
+        $numFiles = rand(1, 100);
+
+        $faker = Faker\Factory::create();
+
+        $monthInSeconds = 2592000;
+
+        for ($i=0; $i < $numFiles; $i++) {
+            $filename = $faker->word().'.txt';
+            $content  = $faker->text(rand(5, 1000));
+            file_put_contents($path.$filename, $content);
+            touch($path.$filename, time() - rand(0, $monthInSeconds));
+        }
+
         $adapter = new Local($path);
         return new Filesystem($adapter);
     }
@@ -39,5 +52,23 @@ final class MultiDirectionalFileSyncTest extends TestCase
             ->with($directoryC)
             ->withProgressBar()
             ->begin();
+
+        $filesA = glob(__DIR__.'/Data/a/*.txt');
+        $filesB = glob(__DIR__.'/Data/b/*.txt');
+        $filesC = glob(__DIR__.'/Data/c/*.txt');
+
+        $this->assertSameSize($filesA, $filesB);
+        $this->assertSameSize($filesA, $filesC);
+
+        foreach($filesA as $fileA) {
+            $fileB = __DIR__.'/Data/b/'.basename($fileA);
+            $fileC = __DIR__.'/Data/c/'.basename($fileA);
+
+            $this->assertFileExists($fileB);
+            $this->assertFileExists($fileC);
+
+            $this->assertFileEquals($fileA, $fileB);
+            $this->assertFileEquals($fileA, $fileC);
+        }
     }
 }

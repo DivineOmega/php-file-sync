@@ -20,7 +20,7 @@ class File
     public function __construct(string $path, string $timestamp)
     {
         $this->path = $path;
-        $this->timestamp = new Carbon($timestamp);
+        $this->timestamp = Carbon::createFromTimestamp($timestamp);
     }
 
     public function isNewerThan(File $file)
