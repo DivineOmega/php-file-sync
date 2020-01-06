@@ -30,7 +30,7 @@ class MultiDirectional implements FileSyncStrategyInterface
         if ($this->showProgressBar) {
             $maxProgress = 1;
             $progressBar = new ProgressBar();
-            $progressBar->setMaxProgress(1);
+            $progressBar->setMaxProgress($maxProgress);
             $progressBar->setMessage('Getting file listings...');
             $progressBar->display();
         }
