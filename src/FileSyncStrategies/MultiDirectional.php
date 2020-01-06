@@ -3,9 +3,7 @@
 namespace DivineOmega\FileSync\FileSyncStrategies;
 
 use DivineOmega\CliProgressBar\ProgressBar;
-use DivineOmega\FileSync\FileListing\FileListing;
 use DivineOmega\FileSync\FileListing\FileListingFactory;
-use DivineOmega\FileSync\FileListing\TransferAction;
 use DivineOmega\FileSync\FileListing\TransferActionFactory;
 use DivineOmega\FileSync\Interfaces\FileSyncStrategyInterface;
 use League\Flysystem\Filesystem;
