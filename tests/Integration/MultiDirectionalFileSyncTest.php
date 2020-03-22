@@ -1,5 +1,7 @@
 <?php
 
+namespace DivineOmega\FileSync\Tests;
+
 use DivineOmega\FileSync\FileSync;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
@@ -22,17 +24,17 @@ final class MultiDirectionalFileSyncTest extends TestCase
             mkdir($path, 0777, true);
         }
 
-        $numFiles = rand(1, 100);
+        $numFiles = random_int(1, 100);
 
-        $faker = Faker\Factory::create();
+        $faker = \Faker\Factory::create();
 
         $monthInSeconds = 2592000;
 
         for ($i=0; $i < $numFiles; $i++) {
             $filename = $faker->word().'.txt';
-            $content  = $faker->text(rand(5, 1000));
+            $content  = $faker->text(random_int(5, 1000));
             file_put_contents($path.$filename, $content);
-            touch($path.$filename, time() - rand(0, $monthInSeconds));
+            touch($path.$filename, time() - random_int(0, $monthInSeconds));
         }
 
         $adapter = new Local($path);
