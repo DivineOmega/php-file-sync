@@ -17,10 +17,15 @@ class FileListing
         $filesystem->addPlugin(new ListWith());
         $listing = $filesystem->listWith(['timestamp'], null, true);
 
-        $this->files = array_map(function($object) {
-            return new File($object['path'], $object['timestamp']);
-        }, $listing);
+        $this->files = [];
 
+        foreach ($listing as $object) {
+            if ($object['type'] !== 'file') {
+                continue;
+            }
+
+            $this->files[] = new File($object['path'], $object['timestamp']);
+        }
     }
 
     public function getFileByPath(string $path)
